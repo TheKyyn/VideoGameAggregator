@@ -4,22 +4,38 @@
     <div class="container mx-auto px-4">
         <div class="game-details border-b border-gray-800 pb-12 flex flex-col lg:flex-row">
             <div class="flex-none">
-                <img src="/ff7.jpg" alt="game cover">
+                <img src="{{ Str::replaceFirst('thumb', 'cover_big', $game['cover']['url'] ?? '') }}" alt="game cover">
             </div>
             <div class="lg:ml-12 lg:mr-64">
-                <h2 class="font-semibold text-4xl leading-tight mt-1">Final Fantasy VII Remake</h2>
+                <h2 class="font-semibold text-4xl leading-tight mt-1">{{ $game['name'] ?? '' }}</h2>
                 <div class="text-gray-400">
-                    <span>Adventure, RPG</span>
+                    <span>
+                        @foreach ($game['genres'] as $genre)
+                            {{ $genre['name'] }},
+                        @endforeach
+                    </span>
                     &middot;
-                    <span>Square Enix</span>
+                    <span>{{ $game['involved_companies'][0]['company']['name'] }}</span>
                     &middot;
-                    <span>Playstation 4</span>
+                    <span>
+                        @foreach ($game['platforms'] as $platform)
+                            @if (array_key_exists('abbreviation', $platform))
+                                {{ $platform['abbreviation'] }},
+                            @endif
+                        @endforeach
+                    </span>
                 </div>
 
                 <div class="flex flex-wrap items-center mt-8">
                     <div class="flex items-center">
                         <div class="w-16 h-16 bg-gray-800 rounded-full">
-                            <div class="font-semibold text-xs flex justify-center items-center h-full">90%</div>
+                            <div class="font-semibold text-xs flex justify-center items-center h-full">
+                                @if (array_key_exists('rating', $game))
+                                    {{ round($game['rating']) . '%' }}
+                                @else
+                                    0%
+                                @endif
+                            </div>
                         </div>
                         <div class="ml-4 text-xs">Member <br> Score</div>
                     </div>
@@ -140,8 +156,7 @@
         </div>
         <div class="similar-games-container mt-8">
             <h2 class="text-blue-500 uppercase tracking-wide font-semibold">Similar Games</h2>
-            <div
-                class="popular-games text-sm grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 xl:grid-cols-6 gap-12 pd-16">
+            <div class="popular-games text-sm grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 xl:grid-cols-6 gap-12 pd-16">
                 <div class="game mt-8">
                     <div class="relative inline-block">
                         <a href="#">
