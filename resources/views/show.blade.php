@@ -84,8 +84,8 @@
                 </div>
                 <p class="mt-12">{{ $game['summary'] }}</p>
                 <div class="mt-12">
-                    {{-- <button
-                        class="flex bg-blue-500 text-white font-semibold px-4 py-4 hover:bg-blue-600 rounded transition ease-in-out duration-150">
+                    <button
+                        {{-- class="flex bg-blue-500 text-white font-semibold px-4 py-4 hover:bg-blue-600 rounded transition ease-in-out duration-150">
                         <svg class="w-6 fill-current" viewBox="0 0 24 24">
                             <path d="M0 0h24v24H0z" fill="none"></path>
                             <path
@@ -123,7 +123,7 @@
         </div> <!-- end images-container -->
 
     </div>
-    <div class="similar-games-container mt-8">
+    {{-- <div class="similar-games-container mt-8">
         <h2 class="text-blue-500 uppercase tracking-wide font-semibold">Similar Games</h2>
         <div class="similar-games text-sm grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 xl:grid-cols-6 gap-12">
             @foreach ($game['similarGames'] as $game)
@@ -141,7 +141,7 @@
                                 </div>
                             </div>
                     </div>
-            @endif
+            @endif --}}
 
             <a href="#"
                 class="block text-base font-semibold leading-tight hover:text-gray-400 mt-8">{{ $game['name'] }}</a>

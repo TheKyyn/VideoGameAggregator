@@ -52,8 +52,8 @@ class GamesController extends Controller
         // dump($recentlyReviewed);
 
         $mostAnticipated = Http::withHeaders(config('services.igdb'))
-        ->withBody(
-            "fields name, cover.url, first_release_date, total_rating_count, platforms.abbreviation, rating, rating_count, summary, slug;
+            ->withBody(
+                "fields name, cover.url, first_release_date, total_rating_count, platforms.abbreviation, rating, rating_count, summary, slug;
         where platforms = (48,49,130,6)
         & (first_release_date >= {$current}
         & first_release_date < {$afterFourMonths}
@@ -61,24 +61,24 @@ class GamesController extends Controller
         sort rating_count desc;
         limit 4;
         ",
-            "text/plain"
-        )->post('https://api.igdb.com/v4/games')
-        ->json();
+                "text/plain"
+            )->post('https://api.igdb.com/v4/games')
+            ->json();
 
         // dump($mostAnticipated);
 
         $comingSoon = Http::withHeaders(config('services.igdb'))
-        ->withBody(
-            "fields name, cover.url, first_release_date, total_rating_count, platforms.abbreviation, rating, rating_count, summary, slug;
+            ->withBody(
+                "fields name, cover.url, first_release_date, total_rating_count, platforms.abbreviation, rating, rating_count, summary, slug;
         where platforms = (48,49,130,6)
         & first_release_date < {$current}
         & total_rating_count > 5);
         sort first_release_date desc;
         limit 4;
         ",
-            "text/plain"
-        )->post('https://api.igdb.com/v4/games')
-        ->json();
+                "text/plain"
+            )->post('https://api.igdb.com/v4/games')
+            ->json();
 
         // dump($comingSoon);
 
@@ -112,16 +112,16 @@ class GamesController extends Controller
     public function show(string $slug)
     {
         $game = Http::withHeaders(config('services.igdb'))
-            ->withBody([
-                'body' => "
-                fields *, cover.*, first_release_date, platforms.abbreviation, rating, slug, summary,
-                involved_companies.company.name, genres.*, aggregated_rating, websites.*, videos.*, screenshots.*,
-                similar_games.cover.url, similar_games.name, similar_games.rating, similar_games.platforms.abbreviation, similar_games.slug;
-                where slug = \"{$slug}\";
-            "
-            ])
+            ->withBody(
+                "fields *, cover.*, first_release_date, platforms.abbreviation, rating, slug, summary,
+        involved_companies.company.name, genres.*, aggregated_rating, websites.*, videos.*, screenshots.*,
+        similar_games.cover.url, similar_games.name, similar_games.rating, similar_games.platforms.abbreviation, similar_games.slug;
+        where slug = \"{$slug}\";",
+                "text/plain"
+            )
             ->post('https://api.igdb.com/v4/games')
             ->json();
+
 
         return view('show', [
             'game' => $this->formatGameForView($game[0]),
@@ -137,7 +137,7 @@ class GamesController extends Controller
             'platforms' => collect($game['platforms'])->pluck('abbreviation')->implode(', '),
             'memberRating' => array_key_exists('rating', $game) ? round($game['rating']) . '%' : '0%',
             'criticRating' => array_key_exists('aggregated_rating', $game) ? round($game['aggregated_rating']) . '%' : '0%',
-            'trailer' => 'https://youtube.com/watch/'.$game['video'][0]['video_id'],
+            'trailer' => array_key_exists('video', $game) ? 'https://youtube.com/watch/' . $game['video'][0]['video_id'] : null,
             'screenshots' => collect($game['screenshots'])->map(function ($screenshot) {
                 return [
                     'huge' => Str::replaceFirst('thumb', 'screenshot_huge', $screenshot['url']),
@@ -147,12 +147,12 @@ class GamesController extends Controller
             'similarGames' => collect($game['similar_games'])->map(function ($game) {
                 return collect($game)->merge([
                     'coverImageUrl' => array_key_exists('cover', $game)
-                    ? Str::replaceFirst('thumb', 'cover_big', $game['cover']['url'])
-                    : 'https://via.placeholder.com/264x352',
-                    'rating' => isset($game['rating']) ? round($game['rating']).'%' : null,
+                        ? Str::replaceFirst('thumb', 'cover_big', $game['cover']['url'])
+                        : 'https://via.placeholder.com/264x352',
+                    'rating' => isset($game['rating']) ? round($game['rating']) . '%' : null,
                     'plateforms' => array_key_exists('platforms', $game)
-                    ? collect($game['platforms'])->pluck('abbreviation')->implode(', ')
-                    : null,
+                        ? collect($game['platforms'])->pluck('abbreviation')->implode(', ')
+                        : null,
                 ]);
             })->take(6),
             'social' => [
