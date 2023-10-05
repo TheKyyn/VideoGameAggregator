@@ -84,8 +84,8 @@
                 </div>
                 <p class="mt-12">{{ $game['summary'] }}</p>
                 <div class="mt-12">
-                    <button
-                        {{-- class="flex bg-blue-500 text-white font-semibold px-4 py-4 hover:bg-blue-600 rounded transition ease-in-out duration-150">
+                    {{-- <button
+                        class="flex bg-blue-500 text-white font-semibold px-4 py-4 hover:bg-blue-600 rounded transition ease-in-out duration-150">
                         <svg class="w-6 fill-current" viewBox="0 0 24 24">
                             <path d="M0 0h24v24H0z" fill="none"></path>
                             <path
@@ -122,52 +122,39 @@
             </div>
         </div> <!-- end images-container -->
 
-    </div>
-    {{-- <div class="similar-games-container mt-8">
+
+    <div class="similar-games-container mt-8">
         <h2 class="text-blue-500 uppercase tracking-wide font-semibold">Similar Games</h2>
         <div class="similar-games text-sm grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 xl:grid-cols-6 gap-12">
-            @foreach ($game['similarGames'] as $game)
+
+            @foreach ($game['similarGames'] as $similarGame)
                 <div class="game mt-8">
                     <div class="relative inline-block">
                         <a href="#">
-                            <img src="{{ $game['coverImageUrl'] }}" alt="game cover"
+                            <img src="{{ $similarGame['coverImageUrl'] }}" alt="game cover"
                                 class="hover:opacity-75 transition ease-in-out duration-150">
                         </a>
-                        @if ($game['rating'])
+
+                        @if ($similarGame['rating'])
                             <div class="absolute bottom-0 right-0 w-16 h-16 bg-gray-800 rounded-full"
                                 style="right:-20px; bottom: -20px">
                                 <div class="font-semibold text-xs flex justify-center items-center h-full">
-                                    {{ $game['rating'] }}
+                                    {{ $similarGame['rating'] }}
                                 </div>
                             </div>
+                        @endif
+
                     </div>
-            @endif --}}
 
-            <a href="#"
-                class="block text-base font-semibold leading-tight hover:text-gray-400 mt-8">{{ $game['name'] }}</a>
-            <div class="text-gray-400 mt-1">
-                {{ $game['platforms'] }}
-            </div>
-        </div>
-
-
-        <div class="game mt-8">
-            <div class="relative inline-block">
-                <a href="#">
-                    <img src="/animal-crossing.jpg" alt="animal game cover"
-                        class="hover:opacity-75 transition ease-in-out duration-150">
-                </a>
-                <div class="absolute bottom-0 right-0 w-16 h-16 bg-gray-800 rounded-full"
-                    style="right:-20px; bottom: -20px">
-                    <div class="font-semibold text-xs flex justify-center items-center h-full">80%</div>
+                    <a href="#"
+                        class="block text-base font-semibold leading-tight hover:text-gray-400 mt-8">{{ $similarGame['name'] }}</a>
+                    <div class="text-gray-400 mt-1">
+                        {{-- {{ $similarGame['platforms'] }} --}}
+                    </div>
                 </div>
-            </div>
-            <a href="#" class="block text-base font-semibold leading-tight hover:text-gray-400 mt-8">Animal
-                Crossing</a>
-            <div class="text-gray-400 mt-1">Nintendo Switch</div>
-        </div>
+            @endforeach
 
-    </div>
+        </div> <!-- end similar-games -->
     </div> <!-- end similar-games-container -->
-    </div>
+</div>
 @endsection
